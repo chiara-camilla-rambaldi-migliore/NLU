@@ -1,0 +1,28 @@
+This section will provide information about what model has been used and the main points of the developed pipeline.
+
+\subsection{Model chosen}
+The model chosen is a Long Short-Term Memory (LSTM) Neural Network (NN), a particular type of Recurrent Neural Network. An RNN is a NN that has a feedback connection which gives a sort of memory to the model. The LSTM solves a very big problem of the Vanilla RNN: the vanishing gradient. However, it still has the problem of the explosion gradient which can be avoided by a regularization technique called \textit{clipping gradient} is used. Some other regularization techniques, such as \textit{dropout} and \textit{weight tying} are used to improve the model results. The baseline used is the Vanilla RNN.
+
+\subsection{Pipeline} \label{pipeline}
+
+\subsubsection{Read Text}
+As a first step, the lines of text are read from the files.
+\subsubsection{Create Vocabulary}
+For each line in the train set, a \textbf{vocabulary} is created with all the words seen so far. While creating the vocabulary, a unique index is assigned to each word.
+
+\subsubsection{Tokenize Data}
+Using the unique index given to each word, all the dataset are \textbf{tokenized} and mapped to those indexes.
+\subsubsection{Create Dataset}
+In order to better work with Pytorch dataloader, a custom Dataset class is developed. \\
+The core of the custom class is the \textbf{\_\_getitem\_\_(self, index)} method \cite{customDatasets}. In fact, this is the method called by the \textbf{Dataloader} when dividing the items in batches. An item in the custom Dataset, is a vector of length \textit{sequence\_length}. 
+\subsubsection{Create Dataloader}
+For each set, a Dataset object is created to be passed to a Dataloader.\\
+The Dataloader creates the batches used during the training and test steps.
+\subsubsection{Word Embedding}
+Having the datasets all tokenized is not enough, in fact an embedding from word indexes to word vectors is needed. Luckily, Pytorch provides an embedding layer ready to be used for the purpose.
+\subsubsection{Modeling}
+Given all these ingredients, the model is then trained. \\
+For the purpose of this project, a guideline has been taken from the Pytorch official examples \cite{wordLanguageModel}
+\subsubsection{Evaluation}
+At the end of each epoch during the training, an evaluation on the valid set is done.\\ 
+In case of improvements, the weights of the model are saved as the \textit{best model}, otherwise the learning rate is annealed. At the end of the training, the evaluation is performed on the test set, using the best model weights found during the training.

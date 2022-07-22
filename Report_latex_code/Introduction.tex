@@ -1,0 +1,13 @@
+In this section I will briefly explain what Language Modeling is and what are the main techniques to compute it. Then I will introduce my approach to problem.
+
+\subsection{Language Modeling}
+Language Modeling is a technique that uses probability and statistics to determine the probability that a sequence of words can occur in a sentence. Hence, a Language Model is a model that assigns probability to sequences of words. There are several ways to compute a Language Model:
+\begin{itemize}
+    \item N-grams \cite{Ngram_Language_Models}
+    \item Neural Networks \cite{Bengio_et_al_2003}
+    \item Recurrent Neural Networks \cite{ELMAN1990179}
+    \item Transformers \cite{wang2019language}
+\end{itemize}
+
+\subsection{My approach}
+My work focuses on one of the most used methods nowadays: the Recurrent Neural Network (RNN). RNNs are neural networks with a special architecture that allows you to exhibit temporal dynamic behavior. Moreover, RNNs can process variable length sequences of inputs, in our case words, maintaining an internal state (memory). This internal state is the key to "remember" a huge variety of sequences of words, thus computing a more precise probability of which word will appear.

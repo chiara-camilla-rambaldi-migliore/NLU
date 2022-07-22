@@ -1,0 +1,23 @@
+In this section will be described the aim of the project and the methodology used to achieve it.
+
+\subsection{Goal}
+The goal of this project is to manipulate the given dataset so that it can be fed to a Neural Network and then implement a base RNN and improve it using a better architecture and applying some regularization techniques. Afterwards, these two networks will be analyzed and compared in terms of performance.
+
+\subsection{Methodology}
+From the dataset I will extract a dictionary of unique words, each linked to an index. Those indexes will be used to tokenize the dataset, ending up with a list of numbers (each linked to a precise word). This list of numbers will then be embedded into a list of feature vectors, ready to be fed to the actual RNN.
+The better architectures that can be used to improve the baseline are:
+\begin{itemize}
+    \item LSTM (Long Short Term Memory)
+    \item GRU (Gated Recurrent Unit)
+\end{itemize}
+The more famous and widely used regularization techniques, including some described in the Merity et al. paper \cite{merity2017regularizing}, are:
+The widely used regularization techniques, some of which are described into Merity et al. \cite{merity2017regularizing} paper, are:
+\begin{itemize}
+    \item Gradient clipping
+    \item Variable length backpropagation sequences
+    \item Variational dropout
+    \item Embedding dropout
+    \item Weight tying
+    \item Independent embedding size and hidden size
+\end{itemize}
+When the implementation of the baseline and the improved network will be done, a common metric will be chosen (e.g. perplexity), in order to analyze the performance equally.

@@ -1,0 +1,11 @@
+This section analyses the origin and the statistics of the dataset. The data used for this project are a preprocessed version of the Penn
+Treebank (PTB) data set \cite{TreebankPenn}
+
+\subsection{Origin and composition}
+
+Penn Treebank dataset comes from the Penn Treebank Project (1989-1996).  The project intention was to collect a corpus consisting of 7 million words of part-of-speech tagged text, 3 million words of skeletally parsed text, over 2 million words of text parsed for predicate argument structure, and 1.6 million words of transcribed spoken text annotated for speech disfluencies \cite{treebankProject}. The corpus has been annotated with Part-Of-Speech information and for skeletal syntactic structure during the years. This dataset has been widely used by a lot of researchers to perform NLP tasks on a common dataset, despite the availability of a widely used standard dataset is quite rare. This allows a fair comparison of the NLP methods among the research groups. \\
+The actually used dataset is a Penn Treebank portion of the Wall Street Journal corpus. 
+
+\subsection{Statistics}
+The dataset is composed of 10000 distinct words. It is split into train, validation and test sets. The train set is composed of 42068 lines, with a total of 929589 tokens. The validation set is composed of 3370 lines, with a total of 73760 tokens. The test set is composed of 3761 lines, with a total of 82430 tokens. The vocabulary length is kept to 10000 by a heavy preprocessing computation which also acts on the removal of capital letters, numbers and punctuation. This avoids the use of too much computation time and complexity. \\
+All the words in the vocabulary are present either in train, valid and test sets. \emph{Out of vocabulary} words are avoided due to the preprocessing process that substituted a lot of words with the \textit{"$<unk>$"} token.

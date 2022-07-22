@@ -1,0 +1,79 @@
+This section will provide a brief description of the main metrics used. It will then analyze the results achieved and compare the baseline with the actual model.
+\begin{figure}[t]
+     \centering
+     \begin{subfigure}[b]{0.2\textwidth}
+         \centering
+         \includesvg[inkscapelatex=false, width=\textwidth]{train_loss.svg}
+         \caption{Training Loss}
+         \label{fig:TrainLoss}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.2\textwidth}
+         \centering
+         \includesvg[inkscapelatex=false, width=\textwidth]{valid_loss.svg}
+         \caption{Validation Loss}
+         \label{fig:ValidLoss}
+     \end{subfigure}
+        \caption{Training and Validation losses. Orange is for baseline, blue for intermediate and red for advanced}
+        \label{fig:Losses}
+\end{figure}
+
+\begin{figure}[t]
+     \centering
+     \begin{subfigure}[b]{0.2\textwidth}
+         \centering
+         \includesvg[inkscapelatex=false, width=\textwidth]{train_perplexity.svg}
+         \caption{Training Perplexity}
+         \label{fig:TrainingPP}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.2\textwidth}
+         \centering
+         \includesvg[inkscapelatex=false, width=\textwidth]{valid_perplexity.svg}
+         \caption{Validation Perplexity}
+         \label{fig:ValidPP}
+     \end{subfigure}
+        \caption{Training and Validation perplexities. Orange is for baseline, blue for intermediate and red for advanced}
+        \label{fig:Perplexities}
+\end{figure}
+
+\subsection{Metrics}
+The metrics used for the evaluation of the results are:
+\begin{itemize}
+    \item Perplexity
+    \item Loss
+\end{itemize}
+The perplexity (sometimes called PP for short) of a language model on a test set is the inverse probability of the test set, normalized by the number of words. \\
+For a test set $W = w_1w_2 ...w_N$, \cite{Ngram_Language_Models}:
+\begin{align*}
+    PP(W) & = P(w_1w_2...w_N)^{-\frac{1}{N}} \\
+         & = \sqrt[N]{\frac{1}{P(w_1w_2...w_N)}}
+\end{align*}
+As loss has been used the Cross Entropy Loss, computed on every batch, summed up and divided by the number of batches. This loss allowed us to compute also the perplexity of the model, using a simple formula: 
+\begin{align*}
+    PP(w_{1:n}) & = 2^{H(w_{1:n})} \\
+         & = 2^{-\frac{1}{n}\sum_{1}^{n}\log_2{m(w_n)}}
+\end{align*}
+where the value in the exponent is the \textit{cross-entropy} of our current model with respect to the true distribution \cite{Ngram_Language_Models}. Since in \textbf{Pytorch} the \textit{cross-entropy} is computed with a logarithm in base $e$ and not in base 2, the perplexity in the code is computed as:
+\begin{align*}
+    PP'(w_{1:n}) & = e^{H(w_{1:n})}
+\end{align*}
+
+\subsection{Results}
+The model has been evaluated with three different configurations:
+\begin{itemize}
+    \item Baseline
+    \item Intermediate
+    \item Advanced
+\end{itemize}
+The \textbf{\emph{baseline}} is a Vanilla RNN without dropout; it uses a hyperbolic tangent as non linearity. The \textbf{\emph{intermediate}} is an LSTM with \emph{dropout} and \emph{weight tying}. Finally, the \textbf{\emph{advanced}} is actually the intermediate with in addition the \emph{gradient clipping technique}. As shown in \textbf{\emph{Fig. \ref{fig:Losses}}} and \textbf{\emph{Fig. \ref{fig:Perplexities}}}, both the \emph{intermediate} and \emph{advanced} configurations, outperform the \emph{baseline}. In fact, the results on the test set are:
+\begin{itemize}
+    \item \textbf{\emph{Baseline}} - Loss 4.89, PP 133.26
+    \item \textbf{\emph{Intermediate}} - Loss 4.69, PP 109.25
+    \item \textbf{\emph{Advanced}} - Loss 4.58, PP 97.67
+\end{itemize}
+Moreover, the \emph{intermediate} and \emph{advanced} configurations have a similar trend. While the \emph{baseline} tends to converge quickly to a high perplexity, the others converge more slowly but longer in the epochs. The graphs also show an interesting view on the differences between the training and validation trends during the epochs. The training loss and perplexity of the \emph{baseline} are eventually better than the others, while the results on validation are definitely worse. Therefore, the \emph{baseline} shows an overfitting problem, better handled by the \emph{intermediate} and \emph{advanced} configurations as they implement the dropout regularization technique. In fact, trying to run the advanced configuration without the dropout, it gains $\approx14$ points of perplexity At last, the only addition of the gradient clipping technique significantly improves the perplexity on the validation and test set as we can see comparing the trend of the \emph{intermediate} and the \emph{advanced} configurations.
+
+\subsection{Errors} \label{errors}
+The pipeline used for this project has been developed in such a way that some regularization techniques can't be applied. In particular, the \emph{variable length backpropagation sequences} one. In fact, as described in the sub section \ref{pipeline}, in this project the data is loaded with a \textbf{Dataloader} that needs a dataset object as input. This dataset object, can't change for each batch the size of the \emph{sequence length}, thus removing the possibility of having a variable \emph{BPTT} sequence for each batch.\\
+A further improvement for this project can therefore be to change the way the data is loaded during the training step.
